@@ -7,7 +7,6 @@ L’idée en 30 secondes : Dans cet atelier, vous allez apprendre à **automatis
   
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/8064eb95-da73-4bdd-9ef2-a7cebbbd71c8" />
   
-  
 -------------------------------------------------------------------------------------------------------
 Séquence 1 : Codespace de Github
 -------------------------------------------------------------------------------------------------------
@@ -52,89 +51,7 @@ curl http://localhost
 **Réccupération de l'URL de votre serveur Nginx**. Votre serveur Nginx (et sa page Web) est déployé dans Codespace. Pour obtenir votre URL cliquez sur l'onglet **[PORTS]** dans votre Codespace (à coté de Terminal), ouvrez le port 80 et rendez public votre port (Visibilité du port). Ouvrez l'URL dans votre navigateur et c'est terminé.  
   
 ---------------------------------------------------
-Séquence 3 : Déploiement de l'infrastructure
----------------------------------------------------
-Objectif : Déployer l'infrastructure sur le cluster Kubernetes
-Difficulté : Facile (~15 minutes)
----------------------------------------------------  
-Nous allons à présent déployer notre infrastructure sur Kubernetes. C'est à dire, créér l'image Docker de notre application Flask avec Packer, déposer l'image dans le cluster Kubernetes et enfin déployer l'infratructure avec Ansible (Création du pod, création des PVC et les scripts des sauvegardes aututomatiques).  
-
-**Création de l'image Docker avec Packer**  
-```
-packer init .
-packer build -var "image_tag=1.0" .
-docker images | head
-```
-  
-**Import de l'image Docker dans le cluster Kubernetes**  
-```
-k3d image import pra/flask-sqlite:1.0 -c pra
-```
-  
-**Déploiment de l'infrastructure dans Kubernetes**  
-```
-ansible-playbook ansible/playbook.yml
-```
-  
-**Forward du port 8080 qui est le port d'exposition de votre application Flask**  
-```
-kubectl -n pra port-forward svc/flask 8080:80 >/tmp/web.log 2>&1 &
-```
-  
----------------------------------------------------  
-**Réccupération de l'URL de votre application Flask**. Votre application Flask est déployée sur le cluster K3d. Pour obtenir votre URL cliquez sur l'onglet **[PORTS]** dans votre Codespace (à coté de Terminal) et rendez public votre port 8080 (Visibilité du port). Ouvrez l'URL dans votre navigateur et c'est terminé.  
-
-**Les routes** à votre disposition sont les suivantes :  
-1. https://...**/** affichera dans votre navigateur "Bonjour tout le monde !".
-2. https://...**/health** pour voir l'état de santé de votre application.
-3. https://...**/add?message=test** pour ajouter un message dans votre base de données SQLite.
-4. https://...**/count** pour afficher le nombre de messages stockés dans votre base de données SQLite.
-5. https://...**/consultation** pour afficher les messages stockés dans votre base de données.
-  
----------------------------------------------------  
-### Processus de sauvegarde de la BDD SQLite
-
-Grâce à une tâche CRON déployée par Ansible sur le cluster Kubernetes (un CronJob), toutes les minutes une sauvegarde de la BDD SQLite est faite depuis le PVC pra-data vers le PCV pra-backup dans Kubernetes.  
-
-Pour visualiser les sauvegardes périodiques déposées dans le PVC pra-backup, coller les commandes suivantes dans votre terminal Codespace :  
-
-```
-kubectl -n pra run debug-backup \
-  --rm -it \
-  --image=alpine \
-  --overrides='
-{
-  "spec": {
-    "containers": [{
-      "name": "debug",
-      "image": "alpine",
-      "command": ["sh"],
-      "stdin": true,
-      "tty": true,
-      "volumeMounts": [{
-        "name": "backup",
-        "mountPath": "/backup"
-      }]
-    }],
-    "volumes": [{
-      "name": "backup",
-      "persistentVolumeClaim": {
-        "claimName": "pra-backup"
-      }
-    }]
-  }
-}'
-```
-```
-ls -lh /backup
-```
-**Pour sortir du cluster et revenir dans le terminal**
-```
-exit
-```
-
----------------------------------------------------
-Séquence 4 : Exercices  
+Séquence 3 : Exercices  
 Difficulté : Facile (~30 minutes)
 ---------------------------------------------------
 ### Exercice 1 : Customisation de la page d'accueil 
@@ -164,7 +81,7 @@ Modifier votre playbook afin de :
 * L'utilisateur sera un **utilisateur Linux** : "Votre prénom"
   
 ---------------------------------------------------
-Séquence 5 : Questions  
+Séquence 4 : Questions  
 Difficulté : Moyenne (~45 minutes)
 ---------------------------------------------------
 **Complétez et documentez ce fichier README.md** pour répondre aux questions des exercices.  
@@ -196,7 +113,7 @@ Quelle est la différence entre les modules copy et template dans Ansible ?
 *..Répondez à cet exercice ici..*
 
 ---------------------------------------------------
-Séquence 6 : Atelier  
+Séquence 5 : Atelier  
 Difficulté : Moyenne (~1 heure)
 ---------------------------------------------------
 ### Structurer votre déploiement Ansible afin de pouvoir choisir entre un rôle DEV ou un rôle PROD  
