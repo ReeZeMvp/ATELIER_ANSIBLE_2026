@@ -25,6 +25,11 @@ Difficulté : Simple (~10 minutes)
 ---------------------------------------------------
 Vous allez dans cette séquence mettre en place votre environnement et les logiciels Ansible. Depuis le terminal de votre Codespace copier/coller les codes ci-dessous étape par étape :  
 
+**Installation de Ansible et Nginx**  
+```
+sudo apt update
+sudo apt install -y ansible nginx
+```
 **Vérifier l’environnement**  
 ```
 ansible --version
@@ -43,6 +48,13 @@ ansible-playbook -i inventory.ini playbook.yml
 ```
 curl http://localhost
 ```
+**Forward du port 80 qui est le port d'exposition de votre serveur Nginx**  
+```
+kubectl -n pra port-forward svc/flask 8080:80 >/tmp/web.log 2>&1 &
+```
+  
+---------------------------------------------------  
+**Réccupération de l'URL de votre application Flask**. Votre application Flask est déployée sur le cluster K3d. Pour obtenir votre URL cliquez sur l'onglet **[PORTS]** dans votre Codespace (à coté de Terminal) et rendez public votre port 8080 (Visibilité du port). Ouvrez l'URL dans votre navigateur et c'est terminé.  
   
 ---------------------------------------------------
 Séquence 3 : Déploiement de l'infrastructure
