@@ -1,0 +1,4 @@
+page_title: "Application PROD depoyé avec ansible"
+env: "prod"
+author: "prod - nico et agathe"
+app_user: "ekip prod"

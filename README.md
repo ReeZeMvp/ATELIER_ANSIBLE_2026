@@ -87,30 +87,89 @@ Difficulté : Moyenne (~45 minutes)
 **Complétez et documentez ce fichier README.md** pour répondre aux questions des exercices.  
 Faites preuve de pédagogie et soyez clair dans vos explications et procedures de travail.  
 
-**Question 1 :**  
-Pourquoi Ansible est-il qualifié d’outil "déclaratif" ?    
-  
-*..Répondez à cet exercice ici..*
+## Question 1 : Pourquoi Ansible est-il qualifié d’outil "déclaratif" ?
 
-**Question 2 :**  
-Pourquoi l’utilisation de variables est-elle essentielle dans un playbook ?  
-  
-*..Répondez à cet exercice ici..*
+Ansible est qualifié de **déclaratif** car on décrit **l’état final souhaité** du système, et non pas toutes les étapes techniques pour y parvenir.
 
-**Question 3 :**  
-En quoi Ansible facilite-t-il la gestion de plusieurs serveurs ?  
-  
-*..Répondez à cet exercice ici..*
+Par exemple, au lieu de dire :
+1. créer un fichier,
+2. installer un paquet,
+3. redémarrer un service,
 
-**Question 4 :**  
-Quels sont les avantages et les limites d’Ansible dans un contexte DevOps ?   
-  
-*..Répondez à cet exercice ici..*
-  
-**Question 5 :**  
-Quelle est la différence entre les modules copy et template dans Ansible ?   
-  
-*..Répondez à cet exercice ici..*
+on indique simplement que le paquet doit être présent, que le fichier doit exister avec tel contenu, et que le service doit être démarré. Ansible se charge ensuite d’appliquer les actions nécessaires pour obtenir cet état.
+
+Cette approche rend les playbooks plus lisibles, plus simples à maintenir et plus proches de l’objectif métier que des détails d’exécution.
+
+## Question 2 : Pourquoi l’utilisation de variables est-elle essentielle dans un playbook ?
+
+Les variables sont essentielles car elles permettent de rendre un playbook **réutilisable, flexible et facile à maintenir**.
+
+Au lieu d’écrire plusieurs fois la même valeur en dur dans le fichier, on la stocke dans une variable. Cela évite les répétitions et facilite les modifications : si une valeur change, il suffit de la modifier à un seul endroit.
+
+Les variables permettent aussi d’adapter un playbook selon :
+- l’hôte ciblé,
+- l’environnement (`dev`, `test`, `prod`),
+- ou encore le rôle du serveur.
+
+Elles rendent donc les playbooks plus génériques et plus professionnels.
+
+## Question 3 : En quoi Ansible facilite-t-il la gestion de plusieurs serveurs ?
+
+Ansible facilite la gestion de plusieurs serveurs car il permet d’exécuter les mêmes tâches sur un grand nombre de machines à partir d’un seul poste de contrôle.
+
+Grâce à son inventaire, on peut regrouper les serveurs par catégories et lancer les opérations sur un groupe entier en une seule commande. Ansible peut aussi exécuter les actions en parallèle, ce qui fait gagner du temps.
+
+Cela simplifie :
+- les déploiements,
+- la configuration,
+- les mises à jour,
+- et la vérification de l’état des serveurs.
+
+L’administrateur garde ainsi une vision centralisée de l’infrastructure.
+
+## Question 4 : Quels sont les avantages et les limites d’Ansible dans un contexte DevOps ?
+
+Ansible présente plusieurs avantages dans un contexte DevOps :
+- il automatise les tâches répétitives,
+- il améliore la reproductibilité des déploiements,
+- il accélère la mise en production,
+- il favorise la cohérence entre les environnements,
+- et il s’intègre facilement dans des pipelines CI/CD.
+
+Un autre avantage important est qu’Ansible est généralement **sans agent** : il n’est pas nécessaire d’installer un logiciel sur les machines gérées, ce qui simplifie son adoption.
+
+Cependant, Ansible a aussi certaines limites :
+- il devient plus difficile à maintenir sur des projets très volumineux si les playbooks sont mal organisés,
+- la gestion de la complexité demande une bonne structuration avec des rôles, des variables et un inventaire propre,
+- il est moins adapté à certains besoins d’orchestration avancée ou de gestion d’état permanent que d’autres outils spécialisés.
+
+Ansible est donc très efficace pour l’automatisation, mais il doit être bien structuré pour rester lisible et durable.
+
+## Question 5 : Quelle est la différence entre les modules `copy` et `template` dans Ansible ?
+
+Les modules `copy` et `template` servent tous les deux à placer un fichier sur une machine distante, mais ils ne fonctionnent pas de la même manière.
+
+### `copy`
+Le module `copy` copie un fichier **tel quel** depuis la machine de contrôle vers la machine cible.  
+Il est utilisé quand le contenu du fichier ne doit pas changer.
+
+Exemple d’usage :
+- copier un fichier de configuration statique,
+- déployer une image ou un script inchangé.
+
+### `template`
+Le module `template` utilise un fichier modèle basé sur **Jinja2**.  
+Il permet d’insérer des variables dans le fichier avant de le copier sur la machine distante.
+
+Exemple d’usage :
+- générer un fichier de configuration personnalisé,
+- adapter un fichier selon l’hôte, l’environnement ou le service.
+
+### Différence principale
+- `copy` = fichier statique, sans modification.
+- `template` = fichier dynamique, avec variables remplacées avant copie.
+
+En résumé, on utilise `copy` pour du contenu fixe et `template` pour du contenu paramétrable.
 
 ---------------------------------------------------
 Séquence 5 : Atelier  

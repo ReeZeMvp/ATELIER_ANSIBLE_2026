@@ -1,0 +1,4 @@
+page_title: "Application LOCAL depoyé avec ansible"
+env: "local"
+author: "local - nico et agathe"
+app_user: "ekip local"

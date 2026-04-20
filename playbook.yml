@@ -1,6 +1,6 @@
 ---
 - name: Atelier Ansible dans GitHub Codespaces - version durcie avec remédiation
-  hosts: local
+  hosts: all
   become: true
   gather_facts: true
 
@@ -52,7 +52,7 @@
         mode: "0755"
 
     - name: Déployer la page HTML personnalisée
-      copy:
+      template:
         src: files/index.html
         dest: "{{ page_dest }}"
         owner: root

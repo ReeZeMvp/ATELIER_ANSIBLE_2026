@@ -1,0 +1,4 @@
+page_title: "Application DEV depoyé avec ansible"
+env: "dev"
+author: "dev - nico et agathe"
+app_user: "ekip dev"
